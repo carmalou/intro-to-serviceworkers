@@ -1,5 +1,4 @@
 self.oninstall = function() {
-  console.log("install func");
   // globally accessable cache in service worker
   // you can have multiple caches and the same asset
   // asset fetched will be the last one added (last-in, first-out)

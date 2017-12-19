@@ -41,7 +41,6 @@
       }
       .remark-slide-right {
           bottom: 12px;
-          opacity: .5;
           position: absolute;
           left: 20px;
       }
@@ -54,15 +53,173 @@ class: center, middle, inverse
 
 # Intro to ServiceWorkers
 ---
-class: center, middle, inverse
-
-# Intro to ServiceWorkers
----
 layout: false
 class: center, middle, inverse
 # Carmen Bourlon
 ## Twitter: [@carmalou](https://twitter.com/carmalou)
 ## Blog: [carmalou.com](http://carmalou.com)
+---
+class: left, middle, inverse
+
+# What are Service Workers?
+
+- Cache files and assets
+- Dev Tools > Applications > Service Workers
+---
+class: left, middle, inverse
+
+# Why should I use one?
+
+- Consistency
+- Everyone will lose connection
+- Also, they're just plain awesome
+---
+class: left, middle, inverse
+
+# Who should use Service Workers?
+
+- Everyone!
+---
+class: left, middle, inverse
+
+# Loss of connection
+
+- Modem is down
+---
+class: left, middle, inverse
+
+# Loss of connection
+
+- Modem is down
+- Internet is down
+---
+class: left, middle, inverse
+
+# Loss of connection
+
+- Modem is down
+- Internet is down
+- Website is down
+---
+class: left, middle, inverse
+
+# Does it work server-side?
+
+### No. 😭
+---
+class: left, middle, inverse
+
+# Does it work with server-side code?
+
+### No. 😭
+- Files are cached locally in the users browser
+- No connection to external server
+---
+class: center, middle, inverse
+
+# Alright, let's do it
+---
+class: left, middle, inverse
+
+# Step One: Register your service worker
+---
+class: left, middle, inverse
+
+# Step One: Register your service worker
+
+```javascript
+if(navigator.serviceWorker) {
+  navigator.serviceWorker.register('service-worker.js');
+}
+```
+---
+class: left, middle, inverse
+
+# Step One: Register your service worker
+
+```javascript
+// app's JS file
+if(navigator.serviceWorker) {
+  navigator.serviceWorker.register('service-worker.js');
+}
+```
+
+- Not available in all browsers yet
+- Don't forget to wrap in if-statement!
+---
+class: left, middle, inverse
+
+# Step Two: Install Service Worker
+---
+class: left, middle, inverse
+
+# Step Two: Install Service Worker
+
+```javascript
+// service worker
+self.oninstall = function() {
+  caches.open('cash').then(function(cache) {
+    cache.addAll([
+      'index.html',
+      '/img/empirejs-carmen.jpg',
+      '/'
+    ]);
+  });
+};
+```
+---
+class: left, middle, inverse
+
+# Step Two: Install Service Worker
+
+```javascript
+// service worker
+self.oninstall = function() {
+  caches.open('cash').then(function(cache) {
+    cache.addAll([
+      'index.html',
+      '/img/empirejs-carmen.jpg',
+      '/'
+    ]);
+  });
+};
+```
+- Multiple caches can be defined
+- Good for updating service worker script
+- Add files and assets to cache
+---
+class: left, middle, inverse
+
+# Step Three: Specify function for fetch
+
+```javascript
+// fetch function
+// called when connection is lost
+self.onfetch = function(event) {
+  // this will grab the very last request
+  event.respondWith(caches.match(event.request));
+};
+```
+---
+class: left, middle, inverse
+
+# Step Three: Specify function for fetch
+
+```javascript
+// fetch function
+// called when connection is lost
+self.onfetch = function(event) {
+  // this will grab the very last request
+  event.respondWith(caches.match(event.request));
+};
+```
+
+- Grab latest cached files
+- Returns a promise
+---
+class: center, middle, inverse
+
+# Demo!
 
 </textarea>
 <script src="./scripts/remark-latest.min.js">
@@ -75,7 +232,8 @@ class: center, middle, inverse
     var innerLink = document.createElement('a');
     innerLink.setAttribute('href', 'https://twitter.com/carmalou');
     var innerText = document.createTextNode('Twitter: carmalou');
-    tmpEl.setAttribute('class', 'remark-slide-right');
+    tmpEl.classList.add('remark-slide-right');
+    innerLink.classList.add('carmalou');
     innerLink.appendChild(innerText);
     tmpEl.appendChild(innerLink);
     arr[i].appendChild(tmpEl);
